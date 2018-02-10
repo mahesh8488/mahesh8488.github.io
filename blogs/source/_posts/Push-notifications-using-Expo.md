@@ -72,4 +72,4 @@ curl -H "Content-Type: application/json" -X POST https://exp.host/--/api/v2/push
 EXPO's push notifications are absolutely free of cost and don't require you to sign up for anything.
 
 
-For more details: Click [here] (https://docs.expo.io/versions/latest/guides/push-notifications.html)
+For more details: Click [here](https://docs.expo.io/versions/latest/guides/push-notifications.html)
