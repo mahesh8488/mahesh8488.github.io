@@ -81,3 +81,8 @@ deploy:
   repo: https://github.com/mahesh8488/mahesh8488.github.io.git
   branch: master
   message: "deploy"
+
+feed:
+  type: atom
+  path: atom.xml
+  limit: 10
