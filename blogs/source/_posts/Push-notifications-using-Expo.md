@@ -1,7 +1,7 @@
 ---
 title: Push notifications using Expo
 date: 2018-02-09 17:40:17
-tags:
+tags: Expo.IO PushNotification
 ---
 
 There are several options for push notifications. EXPO's push notification is simple to use. 

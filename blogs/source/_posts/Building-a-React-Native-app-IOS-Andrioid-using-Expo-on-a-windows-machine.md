@@ -1,7 +1,7 @@
 ---
 title: Building a React Native app (IOS/Andrioid) using Expo on a windows machine
 date: 2018-02-06 16:01:09
-tags:
+tags: React-Native Expo.IO
 ---
 
 Some of the interesting dilemmas many developers and teams face while building a mobile application are:

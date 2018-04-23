@@ -1,7 +1,7 @@
 ---
 title: Azure AD authentication in React-Native App
 date: 2018-02-08 11:06:38
-tags:
+tags: AzureAD React-Native
 ---
 
 Our requirement was to enable Azure Active Directory authentication for the App. After exploring some options, I found that a library is already available [react-native-azure-ad](https://github.com/wkh237/react-native-azure-ad).
