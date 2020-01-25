@@ -1,4 +1,4 @@
-﻿﻿﻿﻿---
+﻿---
 title: >-
   Server to Client messaging using SignalR
 date: 2020-01-24 17:38:24
