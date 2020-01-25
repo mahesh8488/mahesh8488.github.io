@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+    <head><meta name="generator" content="Hexo 3.9.0">
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content>
+        <link rel="shortcut icon" href="/images/profile.png">
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Mahesh Alwani" href="/atom.xml">
+        <title>Resolving Azure Multi-factor authentication error for react-native-azure-ad library | Mahesh Alwani&#39;s blog</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/images/profile.png" alt="Mahesh Alwani's blog"></a>
+            <h1><a href="/">Mahesh Alwani</a></h1>
+            <p></p>
+            <div id="follow-icons">
+          <a href="http://github.com/http://github.com/mahesh8488"><i class="fa fa-github-square fa-2x"></i></a>
+        <a href="http://facebook.com/http://facebook.com/mahesh8488"><i class="fa fa-facebook-square fa-2x"></i></a>
+        <a href="http://twitter.com/http://twitter.com/mahesh8488"><i class="fa fa-twitter-square fa-2x"></i></a>
+        <a href="http://linkedin.com/in/http://linkedin.com/in/mahesh-alwani-0487b8104"><i class="fa fa-linkedin-square fa-2x"></i></a>
+        <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  August 1, 2018
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href="/tags/react-native-azure-ad-authentication-Multi-factor-auth/">react-native azure-ad authentication Multi-factor-auth</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Resolving Azure Multi-factor authentication error for react-native-azure-ad library</h1>
+  <section class="post-content article-entry">
+    <p>react-native-azure-ad is a library which makes azure active directory authentication simpler in React-Native apps. I recently found that if user has Multi-factor authentication enabled</p>
+<p>A typical Azure auth will involve user signing in which will return a authorization_code.<br>This code is then used to fetch the access_token. However, when user has MFA (Multi-factor authentication) enabled, this call fails throwing the error <strong><em>AADSTS50079: The user is required to use multi-factor authentication.</em></strong></p>
+<p><img src="https://github.com/mahesh8488/static-warehouse/blob/master/images/Multi-factor%20authentication%20error.png?raw=true" alt="Multi-factor auth issue"></p>
+<h2 id="Attempt-to-fix-1"><a href="#Attempt-to-fix-1" class="headerlink" title="Attempt to fix #1"></a>Attempt to fix #1</h2><p>Typically, “/token” POST API returns 3 important components: <strong><em>id_token, access_token, refresh_token</em></strong>.</p>
+<p>While searching around for solutions, I found that we need to catch this auth error and then fetch token using the “/authorize” endpoint but with query parameter <strong><em>response_type=token</em></strong>.<br>This works, but the problem is it only returns <strong><em>access_token</em></strong><br>To fetch “id_token” I made another call to same api but with ***response_type=id_token”.<br>But, react-native-azure-ad also uses “refresh_token” which is cannot be fetched using any GET APIs. So this solution didn’t work for me.</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>The minimal-solution is to catch the authentication error and fetch the token using GET API (/authorize).<br>Once token is refreshed, the next time you call “/authorize” the authorization_code returned is refreshed.<br>I have forked the react-native-azure-ad <strong><em><a href="https://github.com/mahesh8488/react-native-azure-ad" target="_blank" rel="noopener">here</a></em></strong>.</p>
+<p>To use this version in your project, include below in you package.json</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="string">"react-native-azure-ad"</span>: <span class="string">"https://github.com/mahesh8488/react-native-azure-ad/archive/v1.0.tar.gz"</span>,</span><br></pre></td></tr></table></figure>
+<h2 id="Explaining-my-code-changes"><a href="#Explaining-my-code-changes" class="headerlink" title="Explaining my code changes"></a>Explaining my code changes</h2><ol>
+<li>Catch the Auth error<br> Look for “interaction_required” in the error message.</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">this</span>._resourceForWhichAccessTokenIsFetchedByGet = err.resource;</span><br><span class="line">  <span class="keyword">if</span> (err.response.error.indexOf(<span class="string">"interaction_required"</span>) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">visible</span> : <span class="literal">true</span>&#125;)</span><br><span class="line">    <span class="keyword">this</span>._lock = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">this</span>.props.onVisibilityChange &amp;&amp; <span class="keyword">this</span>.props.onVisibilityChange(<span class="literal">false</span>)</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">page</span>: <span class="keyword">this</span>._getAcquireTokenPopupUrl(context.getConfig().tenant, err.resource, <span class="string">"token"</span>)&#125;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">_getAcquireTokenPopupUrl(tenant: string, <span class="attr">resource</span>: string, <span class="attr">response_type</span>: string): string &#123;</span><br><span class="line">    <span class="keyword">let</span> context = <span class="keyword">this</span>.props.context</span><br><span class="line">    <span class="keyword">let</span> redirect = context.getConfig().redirect_uri</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`https://login.microsoftonline.com/<span class="subst">$&#123;tenant&#125;</span>/oauth2/authorize?response_type=<span class="subst">$&#123;response_type&#125;</span>&amp;resource=<span class="subst">$&#123;resource&#125;</span>`</span> +</span><br><span class="line">      <span class="string">`&amp;client_id=<span class="subst">$&#123;context.getConfig().client_id&#125;</span>`</span> +</span><br><span class="line">      <span class="string">`&amp;scope=openid&amp;nonce=rnad-<span class="subst">$&#123;<span class="built_in">Date</span>.now()&#125;</span>`</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p>Modify the _handleADToken:</p>
+<p> Look for “access_token”, redirect the page to Login. Now that we have fetched the correct access_token, authentication will not break for MFA as the code returned is refreshed.</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">_handleADToken(e:&#123; <span class="attr">url</span>:string &#125;):any&#123;</span><br><span class="line">   log.verbose(<span class="string">'ADLoginView navigate to'</span>, e.url)</span><br><span class="line">   <span class="keyword">if</span>(<span class="keyword">this</span>._lock)</span><br><span class="line">     <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">   <span class="keyword">let</span> code = <span class="regexp">/((\?|\&amp;)code\=)[^\&amp;]+/</span>.exec(e.url) </span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span>(<span class="keyword">this</span>._needRedirect) &#123;</span><br><span class="line">     <span class="comment">// this._needRedirect = false</span></span><br><span class="line">     <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span>(<span class="keyword">this</span>.props.onURLChange) &#123;</span><br><span class="line">     <span class="keyword">this</span>.props.onURLChange(e)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (e.url.indexOf(<span class="string">"access_token"</span>) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">     <span class="keyword">this</span>.setState(&#123;<span class="attr">visible</span> : <span class="literal">true</span>&#125;)</span><br><span class="line">     <span class="keyword">this</span>.props.onVisibilityChange &amp;&amp; <span class="keyword">this</span>.props.onVisibilityChange(<span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">     <span class="comment">// Once access_token is fetched, go back to login, this time auth will go fine.</span></span><br><span class="line">     <span class="keyword">this</span>.setState(&#123;<span class="attr">page</span>: <span class="keyword">this</span>._getLoginUrl(<span class="keyword">this</span>.props.context.getConfig().tenant)&#125;);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="keyword">if</span>( code !== <span class="literal">null</span>)&#123;</span><br><span class="line">     <span class="keyword">this</span>._lock = <span class="literal">true</span></span><br><span class="line">     log.verbose(<span class="string">'ADLoginView._handleADToken code='</span>, code[<span class="number">0</span>])</span><br><span class="line">     code = <span class="built_in">String</span>(code[<span class="number">0</span>]).replace(<span class="regexp">/(\?|\&amp;)?code\=/</span>,<span class="string">''</span>)</span><br><span class="line">     <span class="keyword">this</span>.setState(&#123;<span class="attr">visible</span> : !<span class="keyword">this</span>.props.hideAfterLogin&#125;)</span><br><span class="line">     <span class="keyword">this</span>.props.onVisibilityChange &amp;&amp; <span class="keyword">this</span>.props.onVisibilityChange(<span class="literal">false</span>)</span><br><span class="line">     <span class="keyword">this</span>._getResourceAccessToken(code).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">       log.error(<span class="string">'ADLoginView._getResourceAccessToken'</span>, err)</span><br><span class="line">     &#125;)</span><br><span class="line">     <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>Please comment if you found any alternate solutions !</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Mahesh Alwani</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2020/01/24/Server-to-Client-messaging-using-SignalR/">
+        ← prev <!--Server to Client messaging using SignalR-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/04/21/Documentation-and-live-editor-for-React-Components-in-Typescript/">
+        <!--Documentation and Live Editor for React Components in Typescript--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'mahesh8488-github-io';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2020 Mahesh Alwani. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-28385202-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+

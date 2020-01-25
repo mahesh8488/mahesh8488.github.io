@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+    <head><meta name="generator" content="Hexo 3.9.0">
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content>
+        <link rel="shortcut icon" href="/images/profile.png">
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Mahesh Alwani" href="/atom.xml">
+        <title>Building a React Native app (IOS/Andrioid) using Expo on a windows machine | Mahesh Alwani&#39;s blog</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/images/profile.png" alt="Mahesh Alwani's blog"></a>
+            <h1><a href="/">Mahesh Alwani</a></h1>
+            <p></p>
+            <div id="follow-icons">
+          <a href="http://github.com/http://github.com/mahesh8488"><i class="fa fa-github-square fa-2x"></i></a>
+        <a href="http://facebook.com/http://facebook.com/mahesh8488"><i class="fa fa-facebook-square fa-2x"></i></a>
+        <a href="http://twitter.com/http://twitter.com/mahesh8488"><i class="fa fa-twitter-square fa-2x"></i></a>
+        <a href="http://linkedin.com/in/http://linkedin.com/in/mahesh-alwani-0487b8104"><i class="fa fa-linkedin-square fa-2x"></i></a>
+        <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  February 6, 2018
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href="/tags/React-Native-Expo-IO/">React-Native Expo.IO</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Building a React Native app (IOS/Andrioid) using Expo on a windows machine</h1>
+  <section class="post-content article-entry">
+    <p>Some of the interesting dilemmas many developers and teams face while building a mobile application are:</p>
+<ol>
+<li>What technology stack to use ?</li>
+<li>Should we have 2 seperate stacks for android vs ios app ?</li>
+<li>Should we invest in building a cross platform app and thus enable sharing some code across ?</li>
+<li>Do the existing cross platform frameworks support all my needs ?</li>
+<li>If I am building an enterprise app, will I be able to authenticate using Active directory ?</li>
+</ol>
+<p>My needs were simple:</p>
+<ol>
+<li>I want to able to build a IOS and ANDRIOD app.</li>
+<li>I should be able to authenticate users using the Azure Active directory.</li>
+<li>and ofcourse, I wanted to do this without needing a MAC.</li>
+<li>My app mostly had some workflows for which I had APIs. These APIs were mostly the same one which my Website uses.</li>
+<li>Push notifications.</li>
+</ol>
+<p>I am blogging as I am learning these features one by one.</p>
+<h1 id="Start"><a href="#Start" class="headerlink" title="Start:"></a>Start:</h1><ul>
+<li>Download Expo Client on your phone:</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/mahesh8488/mahesh8488.github.io/blob/master/images/expoClient.PNG?raw=true" alt="Expo XDE"></p>
+<ul>
+<li>Install Expo XDE:   Download <a href="https://github.com/expo/xde/releases" target="_blank" rel="noopener">here</a></li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/mahesh8488/mahesh8488.github.io/blob/master/images/expoXde.PNG?raw=true" alt="Expo XDE"></p>
+<ul>
+<li>Create a new project</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/mahesh8488/mahesh8488.github.io/blob/master/images/newProject.PNG?raw=true" alt="Expo XDE"></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/mahesh8488/mahesh8488.github.io/blob/master/images/newProject2.PNG?raw=true" alt="Expo XDE"></p>
+<ul>
+<li>Expo starts a new tunnel. Scan the QR code or copy the tunnel link to load the newly created APP on your phone.</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/mahesh8488/mahesh8488.github.io/blob/master/images/appInit.PNG?raw=true" alt="Expo XDE"></p>
+<h2 id="Building-and-deploying"><a href="#Building-and-deploying" class="headerlink" title="Building and deploying"></a>Building and deploying</h2><p>You can use any texteditors such as NotePad++ to edit the react-native project created by Expo.<br>Once the app is loading on your phone, building and deploying is easy. Just save the changes made to the code and the App refreshes automatically.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/mahesh8488/mahesh8488.github.io/blob/master/images/phoneApp.jpg?raw=true" alt="Expo XDE"></p>
+<hr>
+<hr>
+<p>Coming up next: <strong>Authentication, Tabs, Push Notification, Publishing App</strong></p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Mahesh Alwani</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/02/08/Azure-AD-authentication-in-React-Native-App/">
+        ← prev <!--Azure AD authentication in React-Native App-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+</nav>
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'mahesh8488-github-io';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2020 Mahesh Alwani. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-28385202-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+    <head><meta name="generator" content="Hexo 3.9.0">
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content>
+        <link rel="shortcut icon" href="/images/profile.png">
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Mahesh Alwani" href="/atom.xml">
+        <title>Azure AD authentication in React-Native App | Mahesh Alwani&#39;s blog</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/images/profile.png" alt="Mahesh Alwani's blog"></a>
+            <h1><a href="/">Mahesh Alwani</a></h1>
+            <p></p>
+            <div id="follow-icons">
+          <a href="http://github.com/http://github.com/mahesh8488"><i class="fa fa-github-square fa-2x"></i></a>
+        <a href="http://facebook.com/http://facebook.com/mahesh8488"><i class="fa fa-facebook-square fa-2x"></i></a>
+        <a href="http://twitter.com/http://twitter.com/mahesh8488"><i class="fa fa-twitter-square fa-2x"></i></a>
+        <a href="http://linkedin.com/in/http://linkedin.com/in/mahesh-alwani-0487b8104"><i class="fa fa-linkedin-square fa-2x"></i></a>
+        <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  February 8, 2018
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href="/tags/AzureAD-React-Native/">AzureAD React-Native</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Azure AD authentication in React-Native App</h1>
+  <section class="post-content article-entry">
+    <p>Our requirement was to enable Azure Active Directory authentication for the App. After exploring some options, I found that a library is already available <a href="https://github.com/wkh237/react-native-azure-ad" target="_blank" rel="noopener">react-native-azure-ad</a>.</p>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>Install package from <code>npm</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --save react-native-azure-ad</span><br></pre></td></tr></table></figure>
+<h2 id="Usage-Example"><a href="#Usage-Example" class="headerlink" title="Usage Example"></a>Usage Example</h2><h3 id="Login"><a href="#Login" class="headerlink" title="Login"></a>Login</h3><p>The following example will show an Azure authorize page in your app, when user successfully logged in, it triggers <code>onSuccess</code> method.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;ReactNativeAD, ADLoginView&#125; <span class="keyword">from</span> <span class="string">'react-native-azure-ad'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> CLIENT_ID = <span class="string">'xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LandingView</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props)</span><br><span class="line">    <span class="keyword">this</span>.AzureADContext = &#123;</span><br><span class="line">      client_id : CLIENT_ID,</span><br><span class="line">      <span class="comment">// Optional</span></span><br><span class="line">      redirectUrl : <span class="string">'http://localhost:8080'</span>,  </span><br><span class="line">      <span class="comment">// Optional</span></span><br><span class="line">      authority_host : <span class="string">'https://login.microsoftonline.com/common/oauth2/authorize'</span>,</span><br><span class="line">      <span class="comment">// Optional</span></span><br><span class="line">      tenant  : <span class="string">'common'</span>,  </span><br><span class="line">      <span class="comment">// Optional</span></span><br><span class="line">      prompt : <span class="string">'none'</span>,</span><br><span class="line">      <span class="comment">// This is required if client_id is a web application id</span></span><br><span class="line">      <span class="comment">// but not recommended doing this way.</span></span><br><span class="line">      client_secret : <span class="string">'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'</span>,</span><br><span class="line">      resources : [</span><br><span class="line">        <span class="string">'https://graph.microsoft.com'</span>,</span><br><span class="line">        <span class="string">'https://outlook.office365.com'</span>,</span><br><span class="line">        <span class="comment">// ... more resources</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">new</span> ReactNativeAD(&#123;</span><br><span class="line">    client_id: CLIENT_ID,</span><br><span class="line">    resources: [</span><br><span class="line">      <span class="string">'https://outlook.office365.com'</span></span><br><span class="line">    ]&#125;)</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">return</span> &lt;ADLoginView</span><br><span class="line">              context=&#123;ReactNativeAD.getContext(CLIENT_ID)&#125;</span><br><span class="line">              onSuccess=&#123;this.onLoginSuccess.bind(this)&#125;/&gt;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  onLoginSuccess(credentials) &#123;</span><br><span class="line">    console.log(credentials[https://outlook.office365.com].access_token)</span><br><span class="line">    // use the access token ..</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Refresh-Token"><a href="#Refresh-Token" class="headerlink" title="Refresh Token"></a>Refresh Token</h3><p>To make all the API calls use the assureToken method to get token and use it in FETCH calls.</p>
+<p>Use <code>assureToken</code> method to assure <code>access_token</code> of specific resource is valid, when access token is expired, this method will attempt to refresh access token automatically and resolve renewed access token in promise. If it failed to renew the token, the access token in promise will be <code>undefined</code>, it means user may have to login again, so you might have to redirect user to ADLoginView for new authorization.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ReactNativeAD.getContext(CLIENT_ID).assureToken(RESOURCE_ID).then((token) =&gt; &#123;</span><br><span class="line"></span><br><span class="line"> // use token ..</span><br><span class="line"></span><br><span class="line">&#125;)</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<p>For more details on this: Refer <a href="https://github.com/wkh237/react-native-azure-ad/blob/master/README.md" target="_blank" rel="noopener">https://github.com/wkh237/react-native-azure-ad/blob/master/README.md</a></p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Mahesh Alwani</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/02/09/Push-notifications-using-Expo/">
+        ← prev <!--Push notifications using Expo-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/02/06/Building-a-React-Native-app-IOS-Andrioid-using-Expo-on-a-windows-machine/">
+        <!--Building a React Native app (IOS/Andrioid) using Expo on a windows machine--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'mahesh8488-github-io';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2020 Mahesh Alwani. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-28385202-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+

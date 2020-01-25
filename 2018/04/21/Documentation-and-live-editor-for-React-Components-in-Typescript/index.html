@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+    <head><meta name="generator" content="Hexo 3.9.0">
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content>
+        <link rel="shortcut icon" href="/images/profile.png">
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Mahesh Alwani" href="/atom.xml">
+        <title>Documentation and Live Editor for React Components in Typescript | Mahesh Alwani&#39;s blog</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/images/profile.png" alt="Mahesh Alwani's blog"></a>
+            <h1><a href="/">Mahesh Alwani</a></h1>
+            <p></p>
+            <div id="follow-icons">
+          <a href="http://github.com/http://github.com/mahesh8488"><i class="fa fa-github-square fa-2x"></i></a>
+        <a href="http://facebook.com/http://facebook.com/mahesh8488"><i class="fa fa-facebook-square fa-2x"></i></a>
+        <a href="http://twitter.com/http://twitter.com/mahesh8488"><i class="fa fa-twitter-square fa-2x"></i></a>
+        <a href="http://linkedin.com/in/http://linkedin.com/in/mahesh-alwani-0487b8104"><i class="fa fa-linkedin-square fa-2x"></i></a>
+        <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  April 21, 2018
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href="/tags/ReactJS-Typescript-Documentation/">ReactJS Typescript Documentation</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Documentation and Live Editor for React Components in Typescript</h1>
+  <section class="post-content article-entry">
+    <p>Its all really exciting to follow the Create-React-app and build your first React applicaiton in minutes. Once you get the taste of it, you start building multiple pages in no time. Then, you enter a phase where you want more people to reuse the components you have built. While promoting your components, you suddenly realize that you didnt give any attention to documentation.<br>    An easier solution, not only to get a documentation without any code changes to solution but also get a page that can act as a playground for others to try out your components, is <a href="https://github.com/reactjs/react-docgen" target="_blank" rel="noopener">React Docgen</a>. React Docgen hit 2 birds in one stone.</p>
+<p>Below steps will guide you in creating a basic react app with documentation in typescript.</p>
+<ul>
+<li>Configure your <strong>package.json</strong> as shown below. You may not need many of the packages for a sample react component. But you may need those later.</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">    &#123;</span><br><span class="line">  <span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"webpack"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="string">"@types/react"</span>: <span class="string">"^16.3.12"</span>,</span><br><span class="line">    <span class="string">"babel-core"</span>: <span class="string">"^6.26.0"</span>,</span><br><span class="line">    <span class="string">"babel-loader"</span>: <span class="string">"^7.1.4"</span>,</span><br><span class="line">    <span class="string">"classnames"</span>: <span class="string">"^2.2.5"</span>,</span><br><span class="line">    <span class="string">"css-loader"</span>: <span class="string">"^0.28.11"</span>,</span><br><span class="line">    <span class="string">"glob"</span>: <span class="string">"^7.1.2"</span>,</span><br><span class="line">    <span class="string">"mobx"</span>: <span class="string">"^4.2.0"</span>,</span><br><span class="line">    <span class="string">"mobx-react"</span>: <span class="string">"^5.0.0"</span>,</span><br><span class="line">    <span class="string">"moment"</span>: <span class="string">"^2.22.1"</span>,</span><br><span class="line">    <span class="string">"path"</span>: <span class="string">"^0.12.7"</span>,</span><br><span class="line">    <span class="string">"prop-types"</span>: <span class="string">"^15.6.1"</span>,</span><br><span class="line">    <span class="string">"react"</span>: <span class="string">"^16.3.2"</span>,</span><br><span class="line">    <span class="string">"react-docgen"</span>: <span class="string">"^2.20.1"</span>,</span><br><span class="line">    <span class="string">"react-docgen-typescript"</span>: <span class="string">"^1.3.0"</span>,</span><br><span class="line">    <span class="string">"react-dom"</span>: <span class="string">"^16.3.2"</span>,</span><br><span class="line">    <span class="string">"react-styleguidist"</span>: <span class="string">"^7.0.8"</span>,</span><br><span class="line">    <span class="string">"style-loader"</span>: <span class="string">"^0.21.0"</span>,</span><br><span class="line">    <span class="string">"ts-loader"</span>: <span class="string">"^4.2.0"</span>,</span><br><span class="line">    <span class="string">"typescript"</span>: <span class="string">"^2.8.3"</span>,</span><br><span class="line">    <span class="string">"webpack"</span>: <span class="string">"^4.6.0"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Create a <strong><em>styleguide.config.js</em></strong> at the root level as shown below:</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> glob = <span class="built_in">require</span>(<span class="string">'glob'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    components: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> glob.sync(path.resolve(__dirname, <span class="string">'components/*.tsx'</span>))</span><br><span class="line">          .filter(<span class="function"><span class="keyword">function</span> (<span class="params">module</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="regexp">/\/[A-Z]\w*\.tsx$/</span>.test(<span class="built_in">module</span>);</span><br><span class="line">          &#125;);</span><br><span class="line">      &#125;,</span><br><span class="line">    resolver: <span class="built_in">require</span>(<span class="string">'react-docgen'</span>).resolver.findAllComponentDefinitions,</span><br><span class="line">    propsParser: <span class="built_in">require</span>(<span class="string">'react-docgen-typescript'</span>).withDefaultConfig(&#123; <span class="attr">propFilter</span>: &#123; <span class="attr">skipPropsWithoutDoc</span>: <span class="literal">true</span> &#125; &#125;).parse,</span><br><span class="line">    webpackConfig: &#123;</span><br><span class="line">        <span class="built_in">module</span>: &#123;</span><br><span class="line">          rules: [</span><br><span class="line">            <span class="comment">// Babel loader, will use your project’s .babelrc</span></span><br><span class="line">            &#123;</span><br><span class="line">              test: <span class="regexp">/\.jsx?$/</span>,</span><br><span class="line">              exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">              loader: <span class="string">'babel-loader'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.tsx?$/</span>,</span><br><span class="line">                loader: <span class="string">'ts-loader'</span>,</span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="comment">// Other loaders that are needed for your components</span></span><br><span class="line">            &#123;</span><br><span class="line">              test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">              <span class="comment">//loader: 'style-loader!css-loader?modules'</span></span><br><span class="line">              use: [</span><br><span class="line">                &#123; <span class="attr">loader</span>: <span class="string">"style-loader"</span> &#125;,</span><br><span class="line">                &#123; <span class="attr">loader</span>: <span class="string">"css-loader"</span> &#125;,</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Add a simple component <strong><em>components/Column.tsx</em></strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Column properties.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> interface IColumnProps extends React.HTMLAttributes&lt;any&gt; &#123;</span><br><span class="line">  <span class="comment">/** prop1 description */</span></span><br><span class="line">  prop1?: string;</span><br><span class="line">  <span class="comment">/** prop2 description */</span></span><br><span class="line">  prop2: number;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * prop3 description</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  prop3: <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">void</span>;</span><br><span class="line">  <span class="comment">/** prop4 description */</span></span><br><span class="line">  prop4: <span class="string">'option1'</span> | <span class="string">'option2'</span> | <span class="string">'option3'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Form column.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Column</span> <span class="keyword">extends</span> <span class="title">Component</span>&lt;<span class="title">IColumnProps</span>, </span>&#123;&#125;&gt; &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;div&gt;Column rendered&lt;/div&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Column;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Add <strong><em>Column.md</em></strong></p>
+</li>
+</ul>
+<pre><code>Column - component description
+```js
+&lt;Column prop1=&quot;test&quot; /&gt;
+</code></pre><ul>
+<li><p>Run <strong><em>yarn</em></strong> to install the packages and then run the <strong><em>styleguidist</em></strong></p>
+<p>  yarn<br>  npx styleguidist server</p>
+</li>
+</ul>
+<p>This will serve the below output, which has 2 parts to it:</p>
+<ol>
+<li>Prop types declaration</li>
+<li>Playground for your react component</li>
+</ol>
+<h3 id="1-Declaration"><a href="#1-Declaration" class="headerlink" title="1. Declaration"></a>1. Declaration</h3><p>As shown in Column.tsx, just adding comment above the prop results into out shown below:</p>
+<pre><code>/** prop2 description */
+prop2: number;
+</code></pre><p><img src="https://github.com/mahesh8488/static-warehouse/blob/master/images/styleguidist-props.PNG?raw=true" alt="Styleguidist Props"></p>
+<h3 id="2-Playground-for-your-React-components"><a href="#2-Playground-for-your-React-components" class="headerlink" title="2. Playground for your React components"></a>2. Playground for your React components</h3><p>Each component gets its own demo and live editor.</p>
+<p><img src="https://github.com/mahesh8488/static-warehouse/blob/master/images/styleguidist-code.PNG?raw=true" alt="Styleguidist Props"></p>
+<p>Using ReactDocgen you can create a platform that makes your code readable and reusable. <a href="https://github.com/mahesh8488/react-doc-gen-typescript" target="_blank" rel="noopener">Here</a> is the github link for sample project I created.</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Mahesh Alwani</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/08/01/Resolving-Azure-Multi-factor-authentication-error-for-react-native-azure-ad-library/">
+        ← prev <!--Resolving Azure Multi-factor authentication error for react-native-azure-ad library-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/02/09/Push-notifications-using-Expo/">
+        <!--Push notifications using Expo--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'mahesh8488-github-io';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2020 Mahesh Alwani. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-28385202-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+

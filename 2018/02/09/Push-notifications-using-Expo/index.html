@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+    <head><meta name="generator" content="Hexo 3.9.0">
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content>
+        <link rel="shortcut icon" href="/images/profile.png">
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Mahesh Alwani" href="/atom.xml">
+        <title>Push notifications using Expo | Mahesh Alwani&#39;s blog</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/images/profile.png" alt="Mahesh Alwani's blog"></a>
+            <h1><a href="/">Mahesh Alwani</a></h1>
+            <p></p>
+            <div id="follow-icons">
+          <a href="http://github.com/http://github.com/mahesh8488"><i class="fa fa-github-square fa-2x"></i></a>
+        <a href="http://facebook.com/http://facebook.com/mahesh8488"><i class="fa fa-facebook-square fa-2x"></i></a>
+        <a href="http://twitter.com/http://twitter.com/mahesh8488"><i class="fa fa-twitter-square fa-2x"></i></a>
+        <a href="http://linkedin.com/in/http://linkedin.com/in/mahesh-alwani-0487b8104"><i class="fa fa-linkedin-square fa-2x"></i></a>
+        <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  February 9, 2018
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href="/tags/Expo-IO-PushNotification/">Expo.IO PushNotification</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Push notifications using Expo</h1>
+  <section class="post-content article-entry">
+    <p>There are several options for push notifications. EXPO’s push notification is simple to use. </p>
+<ol>
+<li>Register the push token in your app.</li>
+</ol>
+<p>Use an endpoint on your servers to save the push token.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Permissions, Notifications &#125; from &apos;expo&apos;;</span><br><span class="line"></span><br><span class="line">const PUSH_ENDPOINT = &apos;https://your-server.com/users/push-token&apos;;</span><br><span class="line"></span><br><span class="line">async function registerForPushNotificationsAsync() &#123;</span><br><span class="line">  const &#123; status: existingStatus &#125; = await Permissions.getAsync(</span><br><span class="line">    Permissions.NOTIFICATIONS</span><br><span class="line">  );</span><br><span class="line">  let finalStatus = existingStatus;</span><br><span class="line"></span><br><span class="line">  // only ask if permissions have not already been determined, because</span><br><span class="line">  // iOS won&apos;t necessarily prompt the user a second time.</span><br><span class="line">  if (existingStatus !== &apos;granted&apos;) &#123;</span><br><span class="line">    // Android remote notification permissions are granted during the app</span><br><span class="line">    // install, so this will only ask on iOS</span><br><span class="line">    const &#123; status &#125; = await Permissions.askAsync(Permissions.NOTIFICATIONS);</span><br><span class="line">    finalStatus = status;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Stop here if the user did not grant permissions</span><br><span class="line">  if (finalStatus !== &apos;granted&apos;) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Get the token that uniquely identifies this device</span><br><span class="line">  let token = await Notifications.getExpoPushTokenAsync();</span><br><span class="line"></span><br><span class="line">  // POST the token to your backend server from where you can retrieve it to send push notifications.</span><br><span class="line">  return fetch(PUSH_ENDPOINT, &#123;</span><br><span class="line">    method: &apos;POST&apos;,</span><br><span class="line">    headers: &#123;</span><br><span class="line">      Accept: &apos;application/json&apos;,</span><br><span class="line">      &apos;Content-Type&apos;: &apos;application/json&apos;,</span><br><span class="line">    &#125;,</span><br><span class="line">    body: JSON.stringify(&#123;</span><br><span class="line">      token: &#123;</span><br><span class="line">        value: token,</span><br><span class="line">      &#125;,</span><br><span class="line">      user: &#123;</span><br><span class="line">        username: &apos;Brent&apos;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Send push notification</li>
+</ol>
+<p>You probably will end up writing another job or application to make a web request to the push token similar to this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -H &quot;Content-Type: application/json&quot; -X POST https://exp.host/--/api/v2/push/send -d &apos;&#123;</span><br><span class="line">  &quot;to&quot;: &quot;ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]&quot;,</span><br><span class="line">  &quot;title&quot;:&quot;hello&quot;,</span><br><span class="line">  &quot;body&quot;: &quot;world&quot;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
+<p>EXPO’s push notifications are absolutely free of cost and don’t require you to sign up for anything.</p>
+<p>For more details: Click <a href="https://docs.expo.io/versions/latest/guides/push-notifications.html" target="_blank" rel="noopener">here</a></p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Mahesh Alwani</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2018/04/21/Documentation-and-live-editor-for-React-Components-in-Typescript/">
+        ← prev <!--Documentation and Live Editor for React Components in Typescript-->
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/02/08/Azure-AD-authentication-in-React-Native-App/">
+        <!--Azure AD authentication in React-Native App--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'mahesh8488-github-io';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2020 Mahesh Alwani. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-28385202-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+

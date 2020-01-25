@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+    <head><meta name="generator" content="Hexo 3.9.0">
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content>
+        <link rel="shortcut icon" href="/images/profile.png">
+        <link rel="canonical" href="http://guolinn.com/">
+        <link rel="alternate" type="application/rss+xml" title="Mahesh Alwani" href="/atom.xml">
+        <title>Server to Client messaging using SignalR | Mahesh Alwani&#39;s blog</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/images/profile.png" alt="Mahesh Alwani's blog"></a>
+            <h1><a href="/">Mahesh Alwani</a></h1>
+            <p></p>
+            <div id="follow-icons">
+          <a href="http://github.com/http://github.com/mahesh8488"><i class="fa fa-github-square fa-2x"></i></a>
+        <a href="http://facebook.com/http://facebook.com/mahesh8488"><i class="fa fa-facebook-square fa-2x"></i></a>
+        <a href="http://twitter.com/http://twitter.com/mahesh8488"><i class="fa fa-twitter-square fa-2x"></i></a>
+        <a href="http://linkedin.com/in/http://linkedin.com/in/mahesh-alwani-0487b8104"><i class="fa fa-linkedin-square fa-2x"></i></a>
+        <a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+  </div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  January 24, 2020
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href="/tags/server-to-client-messaging-signalR-web-performance-TOPIC/">server-to-client messaging signalR web performance TOPIC</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Server to Client messaging using SignalR</h1>
+  <section class="post-content article-entry">
+    <h1 id="Improve-web-performance-using-Server-to-Client-messaging"><a href="#Improve-web-performance-using-Server-to-Client-messaging" class="headerlink" title="Improve web performance using Server to Client messaging"></a>Improve web performance using Server to Client messaging</h1><p>We came across multiple instances in our project where we used to poll APIs to get updated data to display on web pages. There are scenarios where an API call triggers a backend process which may take more than 60 seconds to complete. Most optimal way to handle such scenarios is to ask server to send a notification when there is a change that may affect the displayed data on clients.</p>
+<p><a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr?view=aspnetcore-3.1&amp;tabs=visual-studio" target="_blank" rel="noopener">Asp.net SignalR</a> provides great support for achieving this. SignalR can be easily setup to enable communications within the same site.</p>
+<p>We wanted a way where a external service could communicate to our websites clients when there is an update.</p>
+<p>Here is our solution:</p>
+<p><img src="https://github.com/mahesh8488/static-warehouse/blob/master/images/serverToClientUsingAspNetSignalR.PNG?raw=truehttps://github.com/mahesh8488/static-warehouse/blob/master/images/serverToClientUsingAspNetSignalR.PNG?raw=true" alt="Server to client communication using micro service"></p>
+<h3 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h3><p>Web clients will subscribe for messages unique to their requirements.<br>We used a unique identifier as “Topic” name. <a href="https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions#topics-and-subscriptions" target="_blank" rel="noopener">Topic</a> is a service bus concept which supports on to many communication in a publish/subscribe pattern.</p>
+<p>Below is the controller which will help subscribe/unsubscribe “TOPIC” from client. Since it will communicate directly to SignalR, we have to refer the signalR client library in Web project. (it could have better if I had moved this to Communications service.)</p>
+<p>To subscribe to a topic invoke subscribe method with a specific topic string.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">topicHubModule.factory(<span class="string">"messagingHub"</span>, [<span class="string">"utils"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">utils</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        start: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">signalRUrl</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.connection === <span class="literal">null</span> || <span class="keyword">this</span>.connection === <span class="literal">undefined</span>) &#123;</span><br><span class="line">                <span class="keyword">this</span>.activeSubscriptions = [];</span><br><span class="line">                <span class="keyword">this</span>.connection = <span class="keyword">new</span> signalR.HubConnectionBuilder()</span><br><span class="line">                    .withUrl(signalRUrl)</span><br><span class="line">                    .build();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">await</span> <span class="keyword">this</span>.connection.start();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        stop: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.connection !== <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">await</span> <span class="keyword">this</span>.connection.stop();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        subscribe: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">topic, callback, connectionUrl</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">await</span> <span class="keyword">this</span>.start(connectionUrl);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.activeSubscriptions === <span class="literal">null</span> || <span class="keyword">this</span>.activeSubscriptions === <span class="literal">undefined</span>) &#123;</span><br><span class="line">                <span class="keyword">this</span>.activeSubscriptions = [];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">await</span> <span class="keyword">this</span>.connection.invoke(<span class="string">"subscribe"</span>, topic);</span><br><span class="line">            <span class="keyword">await</span> <span class="keyword">this</span>.connection.on(topic, callback);</span><br><span class="line">            <span class="keyword">this</span>.activeSubscriptions.push(&#123; topic, callback &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        unsubscribe: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">topic, callback, connectionUrl</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">await</span> <span class="keyword">this</span>.start(connectionUrl);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">await</span> <span class="keyword">this</span>.connection.invoke(<span class="string">"unsubscribe"</span>, topic);</span><br><span class="line">            <span class="keyword">await</span> <span class="keyword">this</span>.connection.off(topic, callback);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">this</span>.activeSubscriptions = utils.RemoveItemFromArray(<span class="keyword">this</span>.activeSubscriptions, &#123; topic, callback &#125;, (item1, item2) =&gt; &#123;</span><br><span class="line">                <span class="keyword">return</span> item1.topic === item2.topic &amp;&amp; item2.callback === item2.callback;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;]);</span><br></pre></td></tr></table></figure>
+<h3 id="Communications-service"><a href="#Communications-service" class="headerlink" title="Communications service"></a>Communications service</h3><p>This is a micro service which acts as a wrapper for messaging using SignalR. </p>
+<p>API that need to be implemented:</p>
+<p>This will enable external services to broadcast messages to all clients listening to topic.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[HttpPost(<span class="string">"&#123;message&#125;"</span>)]</span><br><span class="line">public <span class="keyword">async</span> Task&lt;string&gt; SendMessageToSignalR(string topic, [FromBody] Message message)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">await</span> _hubContext.Clients.GroupExcept(topic, <span class="keyword">new</span> List&lt;string&gt;()).SendAsync(topic, message.body);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="External-service"><a href="#External-service" class="headerlink" title="External service"></a>External service</h3><p>This service will connect to the Communications service and invoke SendMessageToSignalR API with the TOPIC name and message. SignalR brodcasts message to every client which is listening to the TOPIC.</p>
+<p>Feel free to comment and suggest better solutions or improve this solution !</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Mahesh Alwani</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2018/08/01/Resolving-Azure-Multi-factor-authentication-error-for-react-native-azure-ad-library/">
+        <!--Resolving Azure Multi-factor authentication error for react-native-azure-ad library--> next →
+    </a>
+    
+</nav>
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'mahesh8488-github-io';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2020 Mahesh Alwani. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-28385202-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+
