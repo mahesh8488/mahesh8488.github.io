@@ -7,8 +7,6 @@ tags: react-native azure-ad authentication Multi-factor-auth
 ---
 
 
-# Resolving Azure Multi-factor authentication error for react-native-azure-ad library
-
 react-native-azure-ad is a library which makes azure active directory authentication simpler in React-Native apps. I recently found that if user has Multi-factor authentication enabled
 
 A typical Azure auth will involve user signing in which will return a authorization_code. 
